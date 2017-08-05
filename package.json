@@ -6,7 +6,8 @@
     "npm": ">=3"
   },
   "scripts": {
-    "start": "npm-run-all --parallel open:src lint:watch test:watch",
+    "start": "npm-run-all --parallel open:src",
+    "prebuild": "rimraf ./dist && mkdir dist && npm run lint && npm run test",
     "build": "babel-node tools/production-build.js && npm run open:dist",
     "lint": "esw webpack.config.* src tools --color",
     "lint:watch": "npm run lint -- --watch",
@@ -14,11 +15,13 @@
     "test:cover": "npm run test -- --coverage ",
     "test:watch": "npm run test -- --watch",
     "open:src": "babel-node tools/dev-server.js",
-    "open:dist": "babel-node tools/prod-server.js"
+    "open:dist": "babel-node tools/prod-server.js",
+    "analyze-bundle": "babel-node ./tools/analyze-bundle.js"
   },
   "author": "Gena Naumenko",
   "license": "MIT",
   "dependencies": {
+    "babel-preset-stage-0": "^6.24.1",
     "object-assign": "4.1.0",
     "react": "15.5.4",
     "react-dom": "15.5.4",
@@ -106,10 +109,17 @@
     }
   },
   "babel": {
-    "presets": ["react", "stage-1"],
+    "presets": [
+      "react",
+      "stage-0",
+      "stage-1"
+    ],
     "env": {
       "development": {
-        "presets": ["env", "react-hmre"]
+        "presets": [
+          "env",
+          "react-hmre"
+        ]
       },
       "production": {
         "presets": [
@@ -128,7 +138,9 @@
         ]
       },
       "test": {
-        "presets": ["env"]
+        "presets": [
+          "env"
+        ]
       }
     }
   },
@@ -139,7 +151,9 @@
       "plugin:import/errors",
       "plugin:import/warnings"
     ],
-    "plugins": ["react"],
+    "plugins": [
+      "react"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
       "ecmaVersion": 6,
@@ -161,7 +175,10 @@
       "no-console": 1,
       "no-debugger": 1,
       "no-var": 1,
-      "semi": [1, "always"],
+      "semi": [
+        1,
+        "always"
+      ],
       "no-trailing-spaces": 0,
       "eol-last": 0,
       "no-underscore-dangle": 0,
@@ -177,7 +194,9 @@
       "react/forbid-prop-types": [
         1,
         {
-          "forbid": ["any"]
+          "forbid": [
+            "any"
+          ]
         }
       ],
       "react/jsx-boolean-value": 0,
