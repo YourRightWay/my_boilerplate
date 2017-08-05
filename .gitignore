@@ -1,12 +1,25 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# Logs
+logs
+*.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+
 # dependencies
 /node_modules
 
-# testing
-/coverage
-
 # production
+dist
+build
+public
+/dist
 /build
 /public
 
