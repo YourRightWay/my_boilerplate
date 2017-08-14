@@ -3,8 +3,13 @@ body {
   display: flex;
 }
 
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
 .chart-cnt {
-  background: #3e3f40;
+  //background: #3e3f40;
   width: 500px;
   height: 500px;
   border-radius: 2px;

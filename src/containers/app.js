@@ -9,17 +9,17 @@ class App extends React.Component {
         this.state = {
             data: [
                 {
-                    angle: 23,
+                    angle: 120,
                     color: "#ff4643",
                     text: 'Risk'
                 },
                 {
-                    angle: 56,
+                    angle: 200,
                     color: "#ff7c40",
                     text: 'Warning'
                 },
                 {
-                    angle: 27,
+                    angle: 40,
                     color: "#2ca02c",
                     text: 'Done'
                 }
