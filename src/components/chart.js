@@ -3,10 +3,10 @@ import * as d3 from "d3";
 
 export default class Chart extends React.Component {
     componentDidMount() {
-        let {width, height, data} = this.props;
+        let {width, height, data, uniqueClass, radius} = this.props;
 
-        var outerRadius = 200,
-            innerRadius = outerRadius / 3,
+        var outerRadius = radius,
+            innerRadius = outerRadius / 4,
             padAngle = .02;
 
         let map = d3.map(data, (d) => d.angle);
@@ -20,14 +20,17 @@ export default class Chart extends React.Component {
             .padAngle(padAngle);
 
 
-        var svg = d3.select(".chart-cnt")
+        var svg = d3.select(`.${uniqueClass}`)
             .append("svg")
             .attr("width", width)
             .attr("height", height)
-            .append("g")
-            .attr('transform', `translate(${width/2}, ${height/2})`);
 
-        let g = svg.selectAll("g")
+        var cnt = svg.append("g")
+            .attr("transform", `translate(${width/2},${height/2}) scale(0.85)`);
+        cnt.transition(t).duration(450)
+            .attr("transform", `translate(${width/2},${height/2}) scale(1)`);
+
+        let g = cnt.selectAll("g")
             .data(pie(map.keys()))
             .enter().append("g")
             .each(function(d, i) {
@@ -75,7 +78,7 @@ export default class Chart extends React.Component {
 
     render() {
         return (
-            <div className="chart-cnt"></div>
+            <div className={`chart-cnt ${this.props.uniqueClass}`}></div>
         );
     }
 }

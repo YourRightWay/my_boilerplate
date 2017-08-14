@@ -1,6 +1,5 @@
 body {
   background: #1b1c1d;
-  display: flex;
 }
 
 html, body {
@@ -9,11 +8,14 @@ html, body {
 }
 
 .chart-cnt {
-  //background: #3e3f40;
+  background: #3e3f40;
   width: 500px;
   height: 500px;
   border-radius: 2px;
   -webkit-box-shadow: 2px 2px 5px 0px rgba(33,32,33,0.7);
   -moz-box-shadow: 2px 2px 5px 0px rgba(33,32,33,0.7);
   box-shadow: 2px 2px 5px 0px rgba(33,32,33,0.7);
+
+  display: inline-block;
+  vertical-align: top;
 }
