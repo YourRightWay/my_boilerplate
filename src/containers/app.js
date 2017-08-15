@@ -8,55 +8,26 @@ class App extends React.Component {
         super()
         this.state = {
             data: {
-                1: [
+                description: 'All therapeutic',
+                investigation: [
                     {
-                        angle: 120,
-                        color: "#ff4643",
-                        text: 'Risk'
+                        angle: 180,
+                        colorSegment: "#d13a33",
+                        colorSubSegment: "#a9301b",
+                        colorSubSegmentDarken: "#8c1f1a",
+                        label: 'Risk'
                     },
                     {
-                        angle: 200,
-                        color: "#ff7c40",
-                        text: 'Warning'
+                        angle: 90,
+                        colorSegment: "#fcb13a",
+                        colorSubSegment: "#fcb13a",
+                        label: 'Warning'
                     },
                     {
-                        angle: 40,
-                        color: "#2ca02c",
-                        text: 'Done'
-                    }
-                ],
-                2: [
-                    {
-                        angle: 60,
-                        color: "#ff4643",
-                        text: 'Risk'
-                    },
-                    {
-                        angle: 140,
-                        color: "#ff7c40",
-                        text: 'Warning'
-                    },
-                    {
-                        angle: 160,
-                        color: "#2ca02c",
-                        text: 'Done'
-                    }
-                ],
-                3: [
-                    {
-                        angle: 310,
-                        color: "#ff4643",
-                        text: 'Risk'
-                    },
-                    {
-                        angle: 40,
-                        color: "#ff7c40",
-                        text: 'Warning'
-                    },
-                    {
-                        angle: 10,
-                        color: "#2ca02c",
-                        text: 'Done'
+                        angle: 90,
+                        colorSegment: "#2bb874",
+                        colorSubSegment: "#2bb874",
+                        label: 'Done'
                     }
                 ]
             }
@@ -64,21 +35,17 @@ class App extends React.Component {
     }
 
     render() {
-        let createCharts = Object.keys(this.state.data).map((data, index) => (
-            <Chart width={400}
-                   key={Math.random()}
-                   height={400}
-                   duration={450}
-                   delay={150*index}
-                   radius={150}
-                   startScale={0.85}
-                   padAngle={.02}
-                   data={this.state.data[data]}/>
-        ))
-
         return (
             <div>
-                { createCharts }
+                <Chart width={600}
+                       height={600}
+                       duration={450}
+                       delay={150}
+                       radius={220}
+                       innerRadiusDiff={1.8}
+                       startScale={0.85}
+                       padAngle={0}
+                       data={this.state.data}/>
             </div>
         );
     }
