@@ -7,46 +7,78 @@ class App extends React.Component {
     constructor() {
         super()
         this.state = {
-            data: [
-                {
-                    angle: 120,
-                    color: "#ff4643",
-                    text: 'Risk'
-                },
-                {
-                    angle: 200,
-                    color: "#ff7c40",
-                    text: 'Warning'
-                },
-                {
-                    angle: 40,
-                    color: "#2ca02c",
-                    text: 'Done'
-                }
-            ]
+            data: {
+                1: [
+                    {
+                        angle: 120,
+                        color: "#ff4643",
+                        text: 'Risk'
+                    },
+                    {
+                        angle: 200,
+                        color: "#ff7c40",
+                        text: 'Warning'
+                    },
+                    {
+                        angle: 40,
+                        color: "#2ca02c",
+                        text: 'Done'
+                    }
+                ],
+                2: [
+                    {
+                        angle: 60,
+                        color: "#ff4643",
+                        text: 'Risk'
+                    },
+                    {
+                        angle: 140,
+                        color: "#ff7c40",
+                        text: 'Warning'
+                    },
+                    {
+                        angle: 160,
+                        color: "#2ca02c",
+                        text: 'Done'
+                    }
+                ],
+                3: [
+                    {
+                        angle: 310,
+                        color: "#ff4643",
+                        text: 'Risk'
+                    },
+                    {
+                        angle: 40,
+                        color: "#ff7c40",
+                        text: 'Warning'
+                    },
+                    {
+                        angle: 10,
+                        color: "#2ca02c",
+                        text: 'Done'
+                    }
+                ]
+            }
         }
     }
 
     render() {
+        let createCharts = Object.keys(this.state.data).map((data, index) => (
+            <Chart width={400}
+                   key={Math.random()}
+                   height={400}
+                   duration={450}
+                   delay={150*index}
+                   radius={150}
+                   startScale={0.85}
+                   padAngle={.02}
+                   data={this.state.data[data]}/>
+        ))
+
         return (
             <div>
-               <Chart width={500}
-                      uniqueClass="chart-cnt1"
-                      height={500}
-                      radius={200}
-                      data={this.state.data}/>
-
-                <Chart width={400}
-                       uniqueClass="chart-cnt2"
-                       radius={150}
-                       height={400}
-                       data={this.state.data}/>
-                <Chart width={300}
-                       radius={100}
-                       uniqueClass="chart-cnt3"
-                       height={300}
-                       data={this.state.data}/>
-                {this.props.children}
+                { createCharts }
             </div>
         );
     }
