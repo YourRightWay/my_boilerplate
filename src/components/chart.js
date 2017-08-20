@@ -1,84 +1,74 @@
-import React from 'react';
+import React from 'react'
 import * as d3 from "d3";
+import * as shape from "d3-shape";
+import { select } from 'd3-selection'
+import { transition } from 'd3-transition'
+import { easeLinear } from 'd3-ease'
 
-export default class Chart extends React.Component {
-    componentDidMount() {
-        let {width, height, data, uniqueClass, radius} = this.props;
-
-        var outerRadius = radius,
-            innerRadius = outerRadius / 4,
-            padAngle = .02;
-
-        let map = d3.map(data, (d) => d.angle);
-        var pie = d3.pie().padAngle(padAngle);
-        var t = d3.transition().duration(750).ease(d3.easeLinear);
+import XAxis from './axis-x'
+import YAxis from './axis-y'
+import Bar from './bar'
 
 
-        var arc = d3.arc()
-            .padRadius(outerRadius)
-            .innerRadius(innerRadius)
-            .padAngle(padAngle);
-
-
-        var svg = d3.select(`.${uniqueClass}`)
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-
-        var cnt = svg.append("g")
-            .attr("transform", `translate(${width/2},${height/2}) scale(0.85)`);
-        cnt.transition(t).duration(450)
-            .attr("transform", `translate(${width/2},${height/2}) scale(1)`);
-
-        let g = cnt.selectAll("g")
-            .data(pie(map.keys()))
-            .enter().append("g")
-            .each(function(d, i) {
-                d3.select(this).style('opacity', 0).transition(t).style('opacity', 1)
-                d.outerRadius = outerRadius - d.data/10;
-            })
-            .attr("d", arc)
-            .attr('fill', (d, i) => data[i].color)
-
-        g.append("path")
-            .attr("d", arc)
-            .attr('fill', (d, i) => data[i].color)
-            .on("mouseover", arcTween(outerRadius, 0))
-            .on("mouseout", arcTween(outerRadius - 20, 150));
-
-        g.append('text')
-            .attr('transform', (d) => `translate(${arc.centroid(d)})`)
-            .attr("dy", ".35em")
-            .style("text-anchor", "middle")
-            .attr("fill", "#fff")
-            .append('tspan')
-            .attr("font-family", "Arial")
-            .attr("font-size", 14)
-            .attr("text-transform", "uppercase")
-            .text((d, i) => data[i].text);
-
-
-        function arcTween(outerRadius, delay) {
-            return function() {
-                d3.select(this).transition().delay(delay).attrTween("d", function(d) {
-
-                    var i = d3.interpolate(d.outerRadius, outerRadius - d.data/20);
-
-                    return function(t) {
-                        d.outerRadius = i(t);
-                        return arc(d);
-                    };
-                });
-            };
-        }
-
-
-
-    }
+class ReactChart extends React.Component {
 
     render() {
+        let data = this.props.data
+
+        let margin = {top: 20, right: 20, bottom: 30, left: 45},
+            width = this.props.width - margin.left - margin.right,
+            height = this.props.height - margin.top - margin.bottom;
+
+        let letters = data.map((d) => d.letter)
+        
+        //D3 mathy bits
+        let ticks = d3.range(0, width, (width / data.length));
+        
+        let x = d3.scaleOrdinal()
+            .domain(letters)
+            .range(ticks)
+
+        let y = d3.scaleLinear()
+            .domain([0, d3.max(data, (d) => d.frequency)])
+            .range([height, 0])
+
+        let bars = []
+        let bottom = 450
+
+        data.forEach((datum, index) => {
+            bars.push(
+                <Bar
+                    key={index}
+                    x={x(datum.letter)}
+                    y={bottom - 6 - (height - y(datum.frequency))}
+                    width={20}
+                    height={height - y(datum.frequency)}/>
+            )
+        })
+
+        console.log('render', this.props)
+        
+
         return (
-            <div className={`chart-cnt ${this.props.uniqueClass}`}></div>
+            <svg width={this.props.width} height={this.props.height}>
+                <YAxis y={40} 
+                       labels={y.ticks().reverse()} 
+                       start={15} 
+                       end={height} />
+
+                <g className="chart"
+                   transform={`translate(${margin.left},${margin.top})`}>
+                    { bars }
+                    <XAxis x={ bottom }
+                           labels={letters}
+                           start={0}
+                           end={width}/>
+                </g>
+            </svg>
         );
     }
+
 }
+
+
+export default ReactChart
