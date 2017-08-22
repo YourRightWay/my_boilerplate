@@ -1,53 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import ReactChart from '../components/chart';
+import * as d3 from "d3";
 
 class App extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            data: [
-                {letter: 'Alpha savec', frequency: .08167},
-                {letter: 'B', frequency: .01492},
-                {letter: 'C', frequency: .02782},
-                {letter: 'D', frequency: .04253},
-                {letter: 'E', frequency: .12702},
-                {letter: 'F', frequency: .02288},
-                {letter: 'G', frequency: .02015},
-                {letter: 'H', frequency: .06094},
-                {letter: 'I', frequency: .06966},
-                {letter: 'J', frequency: .00153},
-                {letter: 'K', frequency: .00772},
-                {letter: 'L', frequency: .04025},
-                {letter: 'M', frequency: .02406},
-                {letter: 'N', frequency: .06749},
-                {letter: 'O', frequency: .07507},
-                {letter: 'P', frequency: .01929},
-                {letter: 'Q', frequency: .00095},
-                {letter: 'R', frequency: .05987},
-                {letter: 'S', frequency: .06327},
-                {letter: 'T', frequency: .09056},
-                {letter: 'U', frequency: .02758},
-                {letter: 'V', frequency: .00978},
-                {letter: 'W', frequency: .02360},
-                {letter: 'X', frequency: .00150},
-                {letter: 'Y', frequency: .01974},
-                {letter: 'Z', frequency: .00074}]
-        }
-        this.test = this.test.bind(this);
-    }
-    
-    test() {
-        this.state.text = 'Hello form chart!'.toUpperCase();
-        this.setState(this.state);
-    }
+    componentDidMount() {
+        
+        let width = 500;
+        let height = 500;
+        let ir = 100;
+        let or = 140;
 
+        var arc = d3.arc()
+            .innerRadius(ir)
+            .outerRadius(or)
+            .startAngle(0)
+            .endAngle(Math.PI/2);
+
+        var arc2 = d3.arc()
+            .innerRadius(ir)
+            .outerRadius(or)
+            .startAngle(Math.PI/2)
+            .endAngle(Math.PI*2);
+
+        var arc3 = d3.arc()
+            .innerRadius(150)
+            .outerRadius(160)
+            .startAngle(0)
+            .endAngle(Math.PI/2);
+
+        var arc4 = d3.arc()
+            .innerRadius(170)
+            .outerRadius(180)
+            .startAngle(0)
+            .endAngle(Math.PI/3);
+        
+        var svg = d3.select(this.node),
+            g = svg.append("g").attr("transform", `translate(${width/2} ${height/2}) rotate(45 0 0)`);
+        
+        g.append('path').transition().duration(750).attr('d', arc)
+        g.append('path').attr('d', arc2).attr('fill', '#e3e3e4')
+        g.append('path').attr('d', arc3).attr('fill', '#000')
+        g.append('path').attr('d', arc4).attr('fill', '#000')
+
+    }
     render() {
         return (
-            <div>
-                <ReactChart width={800} height={500}  data={this.state.data}/>
-            </div>
+            <svg ref={(node) => { this.node = node }} height="500" width="500">
+            </svg>
         );
     }
 }
