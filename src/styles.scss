@@ -1,1 +1,57 @@
+html, body {
+  background: #131111;
+  padding: 0;
+  margin: 0;
+}
 
+.container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+
+}
+
+.inner-container {
+  max-width: 1366px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+svg {
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-item {
+  flex: 1 1 25%;
+  margin: 0 12px;
+  background: #231f20;
+  border: 1px solid #474747;
+  height: 400px;
+}
+
+.flex-item--center {
+  flex-basis: 50%;
+}
+
+@media all and (max-width: 1024px) {
+  .flex-item {
+    flex-basis: 50%;
+  }
+}
+
+//@media (min-width: 320px) and (max-width: 1024px) {
+//
+//
+//  .flex-item--center {
+//    flex-basis: 100%;
+//  }
+//}

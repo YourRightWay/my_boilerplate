@@ -1,74 +1,85 @@
 import React from 'react'
 import * as d3 from "d3";
-import * as shape from "d3-shape";
+import * as shapes from "d3-shape";
 import { select } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 
-import XAxis from './axis-x'
-import YAxis from './axis-y'
-import Bar from './bar'
-
+import ChartAngle from './chart-angle'
 
 class ReactChart extends React.Component {
-
+    generatePathFromD3(or, ir, sa, ea) {
+        this.ir = ir;
+        this.or = or;
+        this.sa = sa;
+        this.ea = ea;
+        return shapes.arc().innerRadius(this.ir).outerRadius(this.or).startAngle(this.sa)
+            .endAngle(this.ea);
+    }
     render() {
-        let data = this.props.data
-
-        let margin = {top: 20, right: 20, bottom: 30, left: 45},
-            width = this.props.width - margin.left - margin.right,
-            height = this.props.height - margin.top - margin.bottom;
-
-        let letters = data.map((d) => d.letter)
+        let charts = [];
+        const { width, height, data } = this.props;
+        const outerRadius = Math.max(width, height) / 4;
+        const self = this;
+        const innerRadius = outerRadius / 1.4;
+        let pie = shapes.pie().padAngle(0).sort(null);
+        let dataFromD3 = pie(Object.keys(data.investigation).map((key) => data.investigation[key].angle));
+        const tSpanStyle = { fontSize: 12, textTransform: 'uppercase' };
         
-        //D3 mathy bits
-        let ticks = d3.range(0, width, (width / data.length));
-        
-        let x = d3.scaleOrdinal()
-            .domain(letters)
-            .range(ticks)
+        dataFromD3.forEach((d, i) => {
+            let arc = self.generatePathFromD3(innerRadius, outerRadius, d.startAngle, d.endAngle);
 
-        let y = d3.scaleLinear()
-            .domain([0, d3.max(data, (d) => d.frequency)])
-            .range([height, 0])
-
-        let bars = []
-        let bottom = 450
-
-        data.forEach((datum, index) => {
-            bars.push(
-                <Bar
-                    key={index}
-                    x={x(datum.letter)}
-                    y={bottom - 6 - (height - y(datum.frequency))}
-                    width={20}
-                    height={height - y(datum.frequency)}/>
-            )
-        })
-
-        console.log('render', this.props)
-        
+            charts.push(
+                <ChartAngle
+                    key={Math.random()}
+                    color={data.investigation[i].colorSegment}
+                    arc={arc()}>
+                </ChartAngle>
+            );
+        });
 
         return (
-            <svg width={this.props.width} height={this.props.height}>
-                <YAxis y={40} 
-                       labels={y.ticks().reverse()} 
-                       start={15} 
-                       end={height} />
-
-                <g className="chart"
-                   transform={`translate(${margin.left},${margin.top})`}>
-                    { bars }
-                    <XAxis x={ bottom }
-                           labels={letters}
-                           start={0}
-                           end={width}/>
+            <svg preserveAspectRatio="xMidYMin" viewBox={`0 0 ${width} ${height}`}>
+                <g className="chart-group" transform={`translate(${width / 2},${height / 2})`}>
+                    { charts }
+                    <text fill="#fff" x="0" y="0" textAnchor="middle" dy=".3em">
+                        <tspan style={tSpanStyle}>
+                           65%
+                        </tspan>
+                    </text>
                 </g>
             </svg>
         );
     }
-
 }
 
+let fakeData = {
+    description: 'All therapeutic',
+    investigation: [
+        {
+            angle: 240,
+            colorSegment: '#d13a33',
+            colorSubSegment: '#a9301b',
+            colorSubSegmentDarken: '#8c1f1a',
+            label: 'RISK'
+        },
+        {
+            angle: 60,
+            colorSegment: '#fcb13a',
+            colorSubSegment: '#fcb13a',
+            label: 'WARNING'
+        },
+        {
+            angle: 60,
+            colorSegment: '#2bb874',
+            colorSubSegment: '#2bb874',
+            label: 'DONE'
+        }
+    ]
+};
+
+ReactChart.defaultProps = {
+    data: fakeData
+};
 
 export default ReactChart
