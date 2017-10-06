@@ -1,0 +1,29 @@
+{
+  "studies": [
+    { "id": 1, "franchise": "ROT" },
+    { "id": 2, "franchise": "ROT" },
+    { "id": 3, "franchise": "FTP" },
+    { "id": 4, "franchise": "FTP" },
+    { "id": 5, "franchise": "FTP" },
+    { "id": 6, "franchise": "TEST" },
+    { "id": 7, "franchise": "TEST" },
+    { "id": 8, "franchise": "TEST" },
+    { "id": 9, "franchise": "TEST" },
+    { "id": 10, "franchise": "TEST" },
+    { "id": 11, "franchise": "TEST" },
+    { "id": 12, "franchise": "TEST" },
+    { "id": 13, "franchise": "TEST" },
+    { "id": 14, "franchise": "TEST" },
+    { "id": 15, "franchise": "DOT" },
+    { "id": 16, "franchise": "DOT" },
+    { "id": 17, "franchise": "DOT" },
+    { "id": 18, "franchise": "LOL" },
+    { "id": 19, "franchise": "LOL" },
+    { "id": 20, "franchise": "LOL" },
+    { "id": 21, "franchise": "UUU" },
+    { "id": 22, "franchise": "UUU" },
+    { "id": 23, "franchise": "UUU" },
+    { "id": 24, "franchise": "UUU" },
+    { "id": 25, "franchise": "UUU" }
+  ]
+}

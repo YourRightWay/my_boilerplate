@@ -17,36 +17,27 @@ class ReactChart extends React.Component {
             .endAngle(this.ea);
     }
     render() {
-        let charts = [];
-        const { width, height, data } = this.props;
-        const outerRadius = Math.max(width, height) / 4;
-        const self = this;
-        const innerRadius = outerRadius / 1.4;
-        let pie = shapes.pie().padAngle(0).sort(null);
-        let dataFromD3 = pie(Object.keys(data.investigation).map((key) => data.investigation[key].angle));
-        const tSpanStyle = { fontSize: 12, textTransform: 'uppercase' };
+        const { width, height } = this.props;
+        const outerRadius = Math.max(width, height) / 3;
+        const innerRadius = outerRadius - 4;
         
-        dataFromD3.forEach((d, i) => {
-            let arc = self.generatePathFromD3(innerRadius, outerRadius, d.startAngle, d.endAngle);
+        let arc = this.generatePathFromD3(innerRadius, outerRadius, 0, (67 * Math.PI)/180);
+        let arc2 = this.generatePathFromD3(innerRadius, outerRadius, (67 * Math.PI)/180, Math.PI);
 
-            charts.push(
-                <ChartAngle
-                    key={Math.random()}
-                    color={data.investigation[i].colorSegment}
-                    arc={arc()}>
-                </ChartAngle>
-            );
-        });
+        let x = Math.cos(30)
+        let y = Math.sin(30)
+
+        console.log(x, y)
+
 
         return (
-            <svg preserveAspectRatio="xMidYMin" viewBox={`0 0 ${width} ${height}`}>
+            <svg width={width} height={height}>
                 <g className="chart-group" transform={`translate(${width / 2},${height / 2})`}>
-                    { charts }
-                    <text fill="#fff" x="0" y="0" textAnchor="middle" dy=".3em">
-                        <tspan style={tSpanStyle}>
-                           65%
-                        </tspan>
-                    </text>
+                    <ChartAngle color="#434343" arc={arc()} />
+                    <ChartAngle color="red" arc={arc2()} />
+
+                    <path d="M0,0 L2,0" fill="none" stroke="#fff"/>
+                    <line x1="0" y1="0" x2={x} y2={y} stroke="green" strokeWidth="4" />
                 </g>
             </svg>
         );
