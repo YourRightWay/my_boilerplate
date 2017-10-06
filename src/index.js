@@ -27,6 +27,8 @@ const degrees = keys.reduce(function (acc, el, index) {
 }, [0]);
 degrees.shift();
 
+console.log(degrees)
+
 
 function generatePathFromD3(outerRadius, innerRadius, startAngle, endAngle) {
     return shapes
@@ -46,20 +48,55 @@ class App extends React.Component {
         return dataFromD3.map((d, i) => {
             const arc = generatePathFromD3(150, 200, d.startAngle, d.endAngle);
 
+            const centroid = arc.centroid(d);
+            const middleAngle = Math.atan2(centroid[1], centroid[0]);
+            const x = Math.cos(middleAngle) * 210;
+            const y = Math.sin(middleAngle) * 210;
+
+            // holder.append("text")
+            //     .style("fill", "black")
+            //     .style("font-size", "56px")
+            //     .attr("dy", ".35em")
+            //     .attr("text-anchor", "middle")
+            //     .attr("transform", "translate(300,150) rotate(0)")
+            //     .text("d3noob.org");
+            
             return (
-                <path key={i} d={arc()} fill={colors[i]} />
+                <g key={i}>
+                    <path d={arc()} fill={colors[i]} />
+                    <line
+                        x1={0}
+                        y1={0}
+                        x2={x}
+                        y2={y}
+                        strokeWidth="1"
+                        stroke="#000" />
+                    <text transform={`translate(${x},${y}) rotate(0)`} 
+                          fill="#000"
+                          fontSize="14px"
+                          dy="0.35"
+                          textAnchor="middle">
+                        Hello 
+                    </text>
+                </g>
             );
         });
     }
     render() {
+        const {h, w} = this.props;
         return (
-            <svg width="500" height="500">
-                <g transform={`translate(${500 / 2},${500 / 2})`}>
+            <svg width={w} height={h}>
+                <g transform={`translate(${w / 2},${h / 2})`}>
                     {this.renderChart()}
                 </g>
             </svg>
         );
     }
+}
+
+App.defaultProps = {
+    w: 700,
+    h: 700
 }
 
 render(
