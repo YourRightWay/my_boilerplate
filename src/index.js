@@ -81,7 +81,7 @@ class BasicChartWidget extends Component {
 
         // Get array with degrees which depends of studies quantity
         this.studiesDegrees = this.convertStudiesToDegree();
-
+        
         this.franchiseReducedDegrees = this.parseFranchise(props.data);
 
         this.routeToStudy = this.routeToStudy.bind(this);
@@ -229,8 +229,6 @@ class BasicChartWidget extends Component {
     }
 
     createSeparators() {
-        console.log(this.franchiseReducedDegrees)
-
         return this.franchiseReducedDegrees.map((data) => {
             const deg = data[Object.keys(data)];
             const x = Utils.angleCoordinates(0, 0, this.INNER_SPLIT_RADIUS, deg).x;
@@ -260,13 +258,26 @@ class BasicChartWidget extends Component {
             const x = centroid[0];
             const y = centroid[1];
             const rotateValue = (midAngle * 180/Math.PI);
-            const rotateAngle = startAngle > Utils.mathRadians(90) ? 180 : 0;
+            function rotateAngle() {
+                if ((startAngle >= Utils.mathRadians(0) && startAngle <= Utils.mathRadians(89)) ||
+                    startAngle >= Utils.mathRadians(180) && startAngle <= Utils.mathRadians(269)) {
+                    return 0
+                }
+
+                if (startAngle >= Utils.mathRadians(90) && startAngle <= Utils.mathRadians(179)) {
+                    return -180
+                }
+
+                if (startAngle >= Utils.mathRadians(270) && startAngle <= Utils.mathRadians(360)) {
+                    return 180
+                }
+            }
             startAngle = endAngle;
 
             return (
                 <text
                     key={nanoId(6)}
-                    transform={`translate(${x}, ${y}), rotate(${rotateAngle}) rotate(${rotateValue})`}
+                    transform={`translate(${x}, ${y}), rotate(${rotateAngle()}) rotate(${rotateValue})`}
                     fill={Utils.colors.LIGHT_BLUE}
                     fontSize={8}
                     textAnchor="middle"
