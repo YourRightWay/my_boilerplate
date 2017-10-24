@@ -10,3 +10,9 @@ const test = {
     str: 'string',
     aaa: 12345
 };
+
+const lololo = {
+    [data]:data,
+    str: 'string',
+    aaa: 12345
+};
