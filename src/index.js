@@ -1,4 +1,5 @@
 const data = 123;
 const obj = {
-    [data]:data
+    [data]:data,
+    str: 'string'
 };
