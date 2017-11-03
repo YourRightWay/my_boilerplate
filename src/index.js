@@ -1,29 +1,73 @@
 function requestUser () {
-    setTimeout(function () {
-        console.log('requestUser: ', 'id:', 123 );
-        const id = 123;
-        requestPayment (id)
-    }, 1200)
+    /**
+     *  Конструктор класса promise
+        Принимает в качестве параметра функцию.
+        которая в свою очередь принимает в качестве параметра два аргумента
+        resolve - все хорошо
+        reject - promise выполнился с ошибкой
+     */
+    const promise = new Promise(function (resolve, reject) {
+        /**
+         * Имитируем задержку сервера
+         */
+        setTimeout(function () {
+            /**
+             * Получаем id от сервера
+             */
+            const user = {
+                name: 'Givi',
+                id: 123
+            };
+            if (!user) {
+                // если что то пошло не так
+                return reject(new Error('Something wrong!!!'))
+            }
+            
+            console.log('requestUser: ', 'get user id:', user);
+            // успех
+            resolve(user)
+        }, 1200)
+    });
+
+    return promise;
 }
 
-function requestPayment (userId) {
-    setTimeout(function () {
-        console.log('requestPayment: ', 'userId:', userId )
-        if (userId) {
+function requestPayment(user) {
+    const promise = new Promise(function (resolve, reject) {
+        /**
+         * Имитируем задержку сервера
+         */
+        setTimeout(function () {
+            /**
+             * Получаем оплату от сервера
+             */
             const payment = {
+                user: user.name,
                 name: 'Privat24',
                 quantity: 2000
             };
-            requestCalculation(payment);
-        }
-    }, 500)
+
+            console.log('requestpayment: ', 'get payment:', payment);
+            if (!payment) {
+                return reject(new Error('Something wrong!!!'))
+            }
+
+            resolve(payment)
+        }, 2200)
+    });
+
+    return promise;
 }
 
-function requestCalculation (payment) {
+function requestCalculation(payment) {
     setTimeout(function () {
         const calculation = Math.round(Math.sqrt((Math.random() * payment.quantity)));
         console.log('requestcalculation: ', 'payment name:', payment.name, 'payment calculation:', calculation );
-    }, 2200)
+    }, 3000);
 }
 
-requestUser();
+
+requestUser()
+    .then(requestPayment)
+    .then(requestCalculation)
+    .catch();
